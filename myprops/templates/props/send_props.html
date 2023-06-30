@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+    Send Props
+{% endblock title %}
+{% load static %}
+{% block content %}
+<div><a href="{% url 'list_props' %}">My props</a></div>
+<main>
+    <div class="send-container">
+        <h1>
+            <div class="left-emoji">✈️</div>
+            <div class="title-h1">Send Props</div>
+            <div class="right-emoji">✨</div>
+        </h1>
+        <form method="post">
+            {%csrf_token%}
+            {{form.as_p}}
+            <button>Send</button>
+        </form>
+    </div>
+</main>
+
+{% endblock content %}

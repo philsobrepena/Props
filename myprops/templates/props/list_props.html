@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+    My Props
+{% endblock title %}
+{% load static %}
+{% block content %}
+    <main>
+        <div class="container">
+            <div>
+                <h1>{{ request.user }}'s props</h1>
+            </div>
+
+            {% if not props %}
+            <p>You have no props</p>
+            <div class="thickletter"><a href="{% url 'send_props' %}">send props</a></div>
+            {% elif new_props %}
+            <p>Congrats {{request.user}}!</p>
+            <ul>
+                {% for prop in new_props %}
+                <div>{{ prop.sender_username }} has giveth you props:</div>
+                <div class="prop-item"> {{ prop.item }}</div>
+                <form method="POST" action="{% url 'mark_prop_viewed' %}">
+                {% csrf_token %}
+                <input type="hidden" name="prop_id" value="{{ prop.id }}">
+                <button type="submit">Add to collection</button>
+            </form>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <table>
+                <thead>
+                    <th>Sender</th>
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Message</th>
+                    {% comment %} <th>Notes</th> {% endcomment %}
+                </thead>
+                <tbody>
+                    {% for prop in props %}
+                    <tr>
+                        <td>{{ prop.sender_username }}</td>
+                        <td>{{ prop.date }}</td>
+                        <td class="prop-item">{{ prop.item }}</td>
+                        <td>{{ prop.description }}</td>
+                        {% comment %} <td>{{ prop.notes }}</td> {% endcomment %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </main>
+{% endblock content %}
